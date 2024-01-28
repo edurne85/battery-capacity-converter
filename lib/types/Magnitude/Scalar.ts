@@ -4,7 +4,7 @@ import {
     bestPrefixByValue,
     prefixMatchers,
 } from './UnitPrefix';
-import { Parser } from './helpers';
+import { KeyAsValueObject, Parser } from './helpers';
 
 const scalarMatcher = new RegExp(
     `^([+-]?[0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)\\s*${prefixMatchers.capturingOptional}(\\p{L}*)$`,
@@ -13,14 +13,14 @@ const scalarMatcher = new RegExp(
 
 const defaultPrecision = 3;
 
-interface ScalarBuilder<T> {
+interface ScalarBuilder<T extends KeyAsValueObject<keyof T & string>> {
     value: number;
-    unit: T;
+    unit: keyof T;
 }
 
-class BaseScalar<T> {
+class BaseScalar<T extends KeyAsValueObject<keyof T & string>> {
     #value: number;
-    #unit: T;
+    #unit: keyof T;
     constructor({ value, unit }: ScalarBuilder<T>) {
         this.#value = value;
         this.#unit = unit;
@@ -30,25 +30,28 @@ class BaseScalar<T> {
         return this.#value;
     }
 
-    get unit(): T {
+    get unit(): keyof T {
         return this.#unit;
     }
 
     toRawString(): string {
-        return `${this.#value} ${this.#unit}`;
+        return `${this.#value} ${String(this.#unit)}`;
     }
 
     toPrefixedString(digits: number, prefix?: PrefixSpec): string {
         prefix ??= bestPrefixByValue(this.#value);
         const value = this.#value / Math.pow(10, prefix.exp);
-        return `${value.toFixed(digits)} ${prefix.symbol}${this.#unit}`;
+        return `${value.toFixed(digits)} ${prefix.symbol}${String(this.#unit)}`;
     }
 
     toString(): string {
         return this.toPrefixedString(defaultPrecision);
     }
 
-    static parse<T>(input: string, unitParser: Parser<T>): BaseScalar<T> {
+    static parse<T extends KeyAsValueObject<keyof T & string>>(
+        input: string,
+        unitParser: Parser<keyof T>,
+    ): BaseScalar<T> {
         const match = input.match(scalarMatcher);
 
         if (match) {
@@ -62,9 +65,9 @@ class BaseScalar<T> {
         }
     }
 
-    static tryParse<T>(
+    static tryParse<T extends KeyAsValueObject<keyof T & string>>(
         input: string,
-        unitParser: (unit: string) => T,
+        unitParser: Parser<keyof T>,
     ): BaseScalar<T> | undefined {
         try {
             return BaseScalar.parse(input, unitParser);
@@ -74,8 +77,10 @@ class BaseScalar<T> {
     }
 }
 
-abstract class Scalar<T> extends BaseScalar<T> {
-    abstract convert(to: T): Scalar<T>;
+abstract class Scalar<
+    T extends KeyAsValueObject<keyof T & string>,
+> extends BaseScalar<T> {
+    abstract convert(to: keyof T): Scalar<T>;
 }
 
 export type { ScalarBuilder };

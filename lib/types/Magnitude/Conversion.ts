@@ -1,28 +1,36 @@
 import { BaseScalar, Scalar, ScalarBuilder } from './Scalar';
+import { KeyAsValueObject } from './helpers';
 
-type Conversion<T> = (magnitude: BaseScalar<T>, to: T) => Scalar<T>;
+type Conversion<
+    T extends KeyAsValueObject<keyof T & string>,
+    R extends Scalar<T> = Scalar<T>,
+> = (magnitude: BaseScalar<T>, to: keyof T) => R;
 
-function makeConversions<T extends string>(
-    conversions: {
-        [keys in T]: number;
+function makeConversions<
+    T extends KeyAsValueObject<keyof T & string>,
+    R extends Scalar<T> = Scalar<T>,
+>(
+    factors: {
+        [keys in keyof T]: number;
     },
-    constructor: ({ value, unit }: ScalarBuilder<T>) => Scalar<T>,
-): Conversion<T> {
-    return (magnitude: BaseScalar<T>, to: T): Scalar<T> => {
+    constructor: ({ value, unit }: ScalarBuilder<T>) => R,
+): Conversion<T, R> {
+    return (magnitude: BaseScalar<T>, to: keyof T): R => {
         return constructor({
-            value:
-                (magnitude.value * conversions[magnitude.unit]) /
-                conversions[to],
+            value: (magnitude.value * factors[magnitude.unit]) / factors[to],
             unit: to,
         });
     };
 }
 
-function add<T extends string>(
-    unit: T,
-    conversion: Conversion<T>,
+function add<
+    T extends KeyAsValueObject<keyof T & string>,
+    R extends Scalar<T> = Scalar<T>,
+>(
+    conversion: Conversion<T, R>,
+    unit: keyof T,
     ...magnitudes: BaseScalar<T>[]
-): Scalar<T> {
+): R {
     const value = magnitudes.reduce((sum, magnitude) => {
         const converted = conversion(magnitude, unit);
         return sum + converted.value;
