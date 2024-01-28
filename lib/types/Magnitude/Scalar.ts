@@ -52,7 +52,7 @@ class BaseScalar<T extends KeyAsValueObject<keyof T & string>> {
         input: string,
         unitParser: Parser<keyof T>,
     ): BaseScalar<T> {
-        const match = input.match(scalarMatcher);
+        const match = [...input.matchAll(scalarMatcher)][0];
 
         if (match) {
             const [, givenValue, prefix, unit] = match;
