@@ -18,5 +18,5 @@
             "@utils/*": ["./lib/utils/*"],
         },
     },
-    "include": ["src/**/*", "lib/**/*"],
+    "include": ["src/**/*", "lib/**/*", "*.config.js", "*.config.ts"],
 }

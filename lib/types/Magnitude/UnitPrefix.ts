@@ -49,7 +49,7 @@ const prefixesByDecreasingExponent = [
     ...prefixesByIncreasingExponent,
 ].reverse();
 const smallestExponentPrefix = prefixesByIncreasingExponent[0];
-const defaultPrefix = UnitPrefixes['']!;
+const defaultPrefix = UnitPrefixes[''];
 
 const prefixMatchers = {
     simple: '[' + Object.keys(UnitPrefixes).join('') + ']',

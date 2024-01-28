@@ -7,7 +7,7 @@ import {
 import { Parser } from './helpers';
 
 const scalarMatcher = new RegExp(
-    `^([+-]?[0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)\\s*${prefixMatchers.capturingOptional}(\p{L}*)$`,
+    `^([+-]?[0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)\\s*${prefixMatchers.capturingOptional}(\\p{L}*)$`,
     'gu',
 );
 
@@ -26,11 +26,11 @@ class BaseScalar<T> {
         this.#unit = unit;
     }
 
-    get value() {
+    get value(): number {
         return this.#value;
     }
 
-    get unit() {
+    get unit(): T {
         return this.#unit;
     }
 

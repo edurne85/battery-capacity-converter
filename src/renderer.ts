@@ -6,4 +6,3 @@ const root = document.createElement('div');
 document.title = 'Hello World!';
 document.body.appendChild(root);
 createRoot(root).render(App({}));
-

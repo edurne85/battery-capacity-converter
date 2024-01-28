@@ -1,16 +1,88 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true,
-    "node": true
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:import/recommended",
-    "plugin:import/electron",
-    "plugin:import/typescript"
-  ],
-  "parser": "@typescript-eslint/parser"
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "standard",
+        "prettier",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/recommended",
+        "plugin:import/electron",
+        "plugin:import/typescript"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module",
+        "project": ["./tsconfig.json"]
+    },
+    "plugins": [
+        "react",
+        "prettier",
+        "@typescript-eslint",
+        "import",
+        "deprecation"
+    ],
+    "rules": {
+        "deprecation/deprecation": "warn",
+        "quotes": [
+            "error",
+            "single",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "react/prop-types": "off",
+        "@typescript-eslint/explicit-function-return-type": [
+            "error",
+            {
+                "allowExpressions": true
+            }
+        ],
+        "no-return-assign": "off",
+        "semi": "off",
+        "@typescript-eslint/semi": ["error"],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": [
+            "error",
+            {
+                "ignoreTypeReferences": true
+            }
+        ],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/explicit-module-boundary-types": [
+            "error",
+            {
+                "allowArgumentsExplicitlyTypedAsAny": true
+            }
+        ],
+        "@typescript-eslint/prefer-enum-initializers": "warn",
+        "max-len": [
+            "warn",
+            {
+                "code": 180,
+                "ignoreComments": true
+            }
+        ],
+        "@typescript-eslint/no-non-null-assertion": "off"
+    },
+    "settings": {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": {
+                "alwaysTryTypes": true
+            }
+        }
+    }
 }
