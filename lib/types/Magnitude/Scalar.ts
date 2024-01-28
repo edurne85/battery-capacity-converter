@@ -8,7 +8,7 @@ import { KeyAsValueObject, Parser } from './helpers';
 
 const scalarMatcher = new RegExp(
     `^([+-]?[0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?)\\s*${prefixMatchers.capturingOptional}(\\p{L}*)$`,
-    'gu',
+    'u',
 );
 
 const defaultPrecision = 3;
@@ -52,7 +52,7 @@ class BaseScalar<T extends KeyAsValueObject<keyof T & string>> {
         input: string,
         unitParser: Parser<keyof T>,
     ): BaseScalar<T> {
-        const match = [...input.matchAll(scalarMatcher)][0];
+        const match = input.match(scalarMatcher);
 
         if (match) {
             const [, givenValue, prefix, unit] = match;
