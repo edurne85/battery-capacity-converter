@@ -2,10 +2,16 @@ type PrefixSpec = {
     siName: string;
     symbol: string;
     exp: number;
+    auxiliar: boolean;
 };
 
-function mkPrefix(symbol: string, siName: string, exp: number): PrefixSpec {
-    return { symbol, siName, exp };
+function mkPrefix(
+    symbol: string,
+    siName: string,
+    exp: number,
+    auxiliar: boolean = false,
+): PrefixSpec {
+    return { symbol, siName, exp, auxiliar };
 }
 
 const UnitPrefixes: { [key: string]: PrefixSpec } = {
@@ -17,14 +23,13 @@ const UnitPrefixes: { [key: string]: PrefixSpec } = {
     f: mkPrefix('f', 'femto', -15),
     p: mkPrefix('p', 'pico', -12),
     n: mkPrefix('n', 'nano', -9),
-    // u: mkPrefix('u', 'micro', -6),
     µ: mkPrefix('µ', 'micro', -6),
     m: mkPrefix('m', 'milli', -3),
-    c: mkPrefix('c', 'centi', -2),
-    d: mkPrefix('d', 'deci', -1),
+    c: mkPrefix('c', 'centi', -2, true),
+    d: mkPrefix('d', 'deci', -1, true),
     '': mkPrefix('', '', 0),
-    da: mkPrefix('da', 'deca', 1),
-    h: mkPrefix('h', 'hecto', 2),
+    da: mkPrefix('da', 'deca', 1, true),
+    h: mkPrefix('h', 'hecto', 2, true),
     k: mkPrefix('k', 'kilo', 3),
     M: mkPrefix('M', 'mega', 6),
     G: mkPrefix('G', 'giga', 9),
@@ -42,9 +47,9 @@ const prefixSymbolAliases: { [key: string]: string } = {
     u: 'µ',
 };
 
-const prefixesByIncreasingExponent = Object.values(UnitPrefixes).sort(
-    (a, b) => a.exp - b.exp,
-);
+const prefixesByIncreasingExponent = Object.values(UnitPrefixes)
+    .filter(p => !p.auxiliar)
+    .sort((a, b) => a.exp - b.exp);
 const prefixesByDecreasingExponent = [
     ...prefixesByIncreasingExponent,
 ].reverse();
