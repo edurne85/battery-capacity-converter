@@ -15,8 +15,8 @@
         "paths": {
             "@components/*": ["./src/components/*"],
             "@model/*": ["./lib/types/*"],
-            "@utils/*": ["./lib/utils/*"],
-        },
+            "@utils/*": ["./lib/utils/*"]
+        }
     },
-    "include": ["src/**/*", "lib/**/*", "*.config.js", "*.config.ts"],
+    "include": ["src/**/*", "lib/**/*", "*.config.js", "*.config.ts"]
 }

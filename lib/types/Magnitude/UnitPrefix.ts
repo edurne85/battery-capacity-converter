@@ -9,7 +9,7 @@ function mkPrefix(
     symbol: string,
     siName: string,
     exp: number,
-    auxiliar: boolean = false,
+    auxiliar = false,
 ): PrefixSpec {
     return { symbol, siName, exp, auxiliar };
 }
